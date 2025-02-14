@@ -1,0 +1,32 @@
+{% extends "blogapp/base.html" %}
+{% block title %}Recipe List{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">List of Recipes</h1>
+    
+    <form method="GET" action="{% url 'blogapp:recipe_list' %}" class="d-flex">
+        <input type="text" name="q" class="form-control me-2" placeholder="Search recipes..." value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+    </form>
+</div>
+
+{% for recipe in posts %}
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">
+                <a href="{{ recipe.get_absolute_url }}" class="text-decoration-none text-dark">
+                    {{ recipe.title }}
+                </a>
+            </h2>
+            <small class="text-muted">
+                by <strong>{{ recipe.author }}</strong> | Published on {{ recipe.publish|date:"F d, Y" }}
+            </small>
+            <p class="card-text mt-2">{{ recipe.description|truncatewords:30|linebreaks }}</p>
+            <a href="{{ recipe.get_absolute_url }}" class="btn btn-primary btn-sm">Read More</a>
+        </div>
+    </div>
+{% empty %}
+    <p class="text-muted">No recipes available.</p>
+{% endfor %}
+{% include "pagination.html" with page=page_obj %}
+{% endblock %}
