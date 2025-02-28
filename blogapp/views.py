@@ -1,8 +1,26 @@
 from django.views.generic import ListView, DetailView
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from .models import Recipe
 from django.db.models import Q
+from .forms import EmailPostForm
+from django.core.mail import send_mail
 
+def post_share(request, post_id):
+    post = get_object_or_404(Recipe, id=post_id, status='published')
+    sent = False
+
+    if request.method == 'POST':
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            subject = f"{cd['name']} recommends you read {post.title}"
+            message = f"Read {post.title} at {request.build_absolute_uri(post.get_absolute_url())}\n\n{cd['name']}'s comments: {cd['comments']}"
+            send_mail(subject, message, cd['email'], [cd['to']])
+            sent = True
+    else:
+        form = EmailPostForm()
+
+    return render(request, 'blogapp/recipes/share.html', {'post': post, 'form': form, 'sent': sent})
 
 class RecipeListView(ListView):
     model = Recipe

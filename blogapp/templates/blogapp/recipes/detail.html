@@ -5,10 +5,17 @@
 <a href="{% url 'blogapp:recipe_list' %}">Back to Recipes</a>
 <h6>
 </h6>
-<div class="head">
-    <h1>{{ recipe.title }}</h1>
+<div class="head" >
+    <div style="display: flex; justify-content: space-between; align-items: center;" >
+        <h1>{{ recipe.title }}</h1>
+        <a href="{% url 'blogapp:post_share' recipe.id %}" style="padding: 8px 12px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+            Share
+        </a>
+    </div>
     <strong>by {{ recipe.author }} | {{ recipe.publish }}</strong>
 </div>
+
+
 
 <p>{{ recipe.description }}</p>
 
