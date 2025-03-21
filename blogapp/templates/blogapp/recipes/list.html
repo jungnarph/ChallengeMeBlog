@@ -21,7 +21,7 @@
             <small class="text-muted">
                 by <strong>{{ recipe.author }}</strong> | Published on {{ recipe.publish|date:"F d, Y" }}
             </small>
-            <p class="card-text mt-2">{{ recipe.description|truncatewords:30|linebreaks }}</p>
+            <p class="card-text mt-2">{{ recipe.description }}</p>
             <a href="{{ recipe.get_absolute_url }}" class="btn btn-primary btn-sm">Read More</a>
         </div>
     </div>

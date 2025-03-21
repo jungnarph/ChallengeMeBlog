@@ -42,7 +42,7 @@ p, li {
 }
 
 .pagination {
-    margin: 40px 0;
+    margin-top: 40px;
     font-weight: bold;
 }
 
@@ -77,4 +77,21 @@ input[type=submit] {
     float: left;
     clear: both;
     padding-left: 10px;
+}
+
+.container {
+    background-color: rgb(241, 215, 181);
+    padding-top: 3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 3rem;
+    border-radius: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }

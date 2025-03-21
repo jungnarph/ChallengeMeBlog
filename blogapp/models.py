@@ -3,13 +3,14 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from taggit.managers import TaggableManager
 
 def save(self, *args, **kwargs):
     if not self.slug:
         base_slug = slugify(self.title)
         slug = base_slug
         count = 1
-        while Post.objects.filter(slug=slug).exists():
+        while Recipe.objects.filter(slug=slug).exists():
             slug = f"{base_slug}-{count}"
             count += 1
         self.slug = slug
@@ -43,6 +44,7 @@ class Recipe(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
 
     objects = RecipeManager()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ('-publish',)
@@ -61,3 +63,18 @@ class Recipe(models.Model):
     @property
     def instructions_list(self):
         return [step.strip() for step in self.instructions.split("\n") if step.strip()]
+
+class Comment(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,related_name='comments')
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created' ,)
+
+    def __str__(self):
+        return f'Comment by {self.name} on {self.post}'

@@ -15,8 +15,6 @@
     <strong>by {{ recipe.author }} | {{ recipe.publish }}</strong>
 </div>
 
-
-
 <p>{{ recipe.description }}</p>
 
 <h2>Ingredients</h2>
@@ -37,5 +35,29 @@
     {% endfor %}
 </ol>
 
+{% with comments.count as total_comments %}
+    <h2>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+    </h2>
+{% endwith %}
 
+{% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            Comment {{ forloop.counter }} by {{ comment.name }}
+            {{ comment.created }}
+        </p>
+        {{ comment.body|linebreaks }}
+    </div>
+{% empty %}
+    <p>There are no comments yet.</p>
+{% endfor %}
+<h2>Add a Comment</h2>
+<form action="{% url 'blogapp:recipe_detail' recipe.publish.year recipe.publish.month recipe.publish.day recipe.slug %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ comment_form.as_p }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 {% endblock %}
